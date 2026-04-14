@@ -4,11 +4,6 @@ We need here to get the data from database
 and also we need calculation 
 and the recommendation from Ai 
 
-
-
-
-*/
-/*
 =====================================
        🍎 DAILY NUTRITION REPORT
 =====================================
@@ -31,7 +26,6 @@ Alcohol:   0               ✅ perfect
 2. Drink 2 more glasses of water tomorrow
 3. Great job on protein — keep it 
 */
-//chalck
 import chalk from 'chalk';
 
 export async function reportCli(subcommand, args) {
@@ -64,5 +58,3 @@ export async function dailyReports() {
     console.log('🏆 SCORE:');
     console.log('💡 RECOMMENDATIONS:');
 }
-
-// exported `dailyReports` can be called by `reportsCommand('SHOW')` or directly.

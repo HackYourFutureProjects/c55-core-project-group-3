@@ -19,25 +19,16 @@ export function parseCommand(userInput) {
   };
 }
 
-/**
- * Main Application Entry Point
- */
 async function startApp() {
   try {
-    // --- PHASE 1: AUTHENTICATION ---
-    // This calls your userCommands loop. 
-    // It will stay there until a user logs in (returns user) or exits (process.exit).
     const currentUser = await userCommands();
 
     console.log(chalk.green.bold(`\nWelcome to your dashboard, ${currentUser.name}!`));
     console.log(`- ${chalk.yellow('3')} to Logout/Exit\n`);
 
-    // --- PHASE 2: MAIN ACTION LOOP ---
-    // Now that we are logged in, we run the primary command loop.
     while (true) {
       const userInput = prompt(chalk.cyan(`${currentUser.name}@foodtracker> `));
 
-      // Handle Exit
       if (userInput === '3' || (userInput && userInput.toUpperCase() === 'EXIT')) {
         console.log(chalk.magenta('Logging out... Goodbye!'));
         break;
@@ -47,7 +38,6 @@ async function startApp() {
 
       const { command, subcommand, args } = parseCommand(userInput);
 
-      // Route to the correct module
       if (command === 'MEAL') {
         await mealsCli(subcommand, args);
       } 
@@ -63,5 +53,4 @@ async function startApp() {
   }
 }
 
-// Start the program
 startApp();

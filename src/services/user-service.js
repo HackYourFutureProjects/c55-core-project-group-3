@@ -60,7 +60,6 @@ export async function createProfile(name, email) {
 }
 
 export async function login(name, email) {
-  // name
   console.log('Enter Your Name:');
   name = String(prompt()).trim();
   console.log('Enter Your e-mail:');
