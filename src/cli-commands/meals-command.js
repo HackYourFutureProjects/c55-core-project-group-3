@@ -5,7 +5,7 @@ import chalk from 'chalk';
 
 export async function mealsCli(subcommand, args) {
     if (!subcommand) {
-        console.log(chalk.yellow('Usage: MEAL [ADD|LIST|DELETE]'));
+        console.log(chalk.yellow('Meals commands is: ADD|LIST|DELETE'));
         return;
     }
 

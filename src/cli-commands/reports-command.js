@@ -28,20 +28,33 @@ Alcohol:   0               ✅ perfect
 */
 import chalk from 'chalk';
 
+
 export async function reportCli(subcommand, args) {
     if (subcommand === 'SHOW') {
         await dailyReports(...args);
     } else if(!subcommand === 'SHOW') {
-        console.log(chalk.red('Invalid Report action. Try: REPORT SHOW'));
+        console.log(chalk.red('Invalid Report Command. Try: REPORT SHOW'));
     }
+}
+
+export async function fetchDate(params) {
+const date = new Date();
+//en-GB is Birtish format to show the date : Day 00-MM-yyyy
+const weekday = date.toLocaleDateString('en-GB', { weekday: 'long' }); // long shows the fullName of the day not Fri but Friday.
+const day = date.getDate();
+const month = date.toLocaleDateString('en-GB', { month: 'long' });
+const year = date.getFullYear();
+
+const formatted = `${weekday} ${day} ${month} ${year}`; // "Friday 11 April 2026"
+console.log('Date:', formatted);
 }
 
 export async function dailyReports() {
     console.log('=====================================');
     console.log("       🍎 DAILY NUTRITION REPORT");
     console.log('=====================================');
-    const date = newDate();
-    console.log(date); // format
+    const date = fetchDate();
+    //console.log(date); // ISO timestamp (UTC)
     // Need to bring user from DB
     console.log(user);
     console.log('📊 MACROS vs GOALS');
