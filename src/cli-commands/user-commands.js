@@ -1,85 +1,83 @@
-/*
- Welkom -->
- Choose one option : 1,2,3
- we need the functions in the backend
- also we need to check input function
-*/
+/*import { createProfile, login } from '../services/user-service.js';
 import chalk from 'chalk';
-
-export async function input(question) {
-  //needs to be implemented
-  return await ask(question);
-}
+import promptSync from 'prompt-sync';
+//node src/cli-commands/user-commands.js
+const prompt = promptSync();
 export async function userCommands() {
   while (true) {
-    console.log(chalk.blue('Welcome to FoodTracker'));
-    console.log(chalk.blue('Your simple daily food tracker'));
-    console.log('1. Create Profile');
-    console.log('2. Login');
-    console.log('3. Exit');
-    const choose = await input('Please choose an option: ');
-    if (choose === 1) {
-      await createProfile(); //needs to be implemented
-    } else if (choose === 2) {
-      await login(); //needs to be implemented
-    } else if (choose === 3) {
-      console.log('Exit Food Tracker');
-    } else {
-      console.log(chalk.red('Invalid input'));
+    try {
+      console.log(chalk.blue('Welcome to FoodTracker'));
+      console.log(chalk.blue('Your simple daily food tracker'));
+      console.log('1. Create Profile');
+      console.log('2. Login');
+      console.log('3. Exit');
+      const userInput = prompt();
+      if (userInput === '3') {
+        console.log('GoodBye Food Tracker'); //adjust
+        break;
+      } if (userInput === '1') {
+        await createProfile(); //needs to be implemented
+      } else if (userInput === '2') {
+        await login(); //needs to be implemented
+      } else {
+        throw new Error(chalk.red('Invalid command'));
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   }
 }
-async function setGoals(){
-  /* 
-Choose your goal:
-OLD ONE
-1. Weight Loss
-2. Maintenance
-3. Muscle Gain
+
+userCommands();
 */
-  console.log("Set your goal:");
-  //We are not sure here
-  console.log("");
-}
-export async function createProfile() {
-  /*
-Enter your name:
-Enter your email:
-Enter your age:
-Enter your height:
-Enter your weight:
-  */
-    console.log("Enter Your Name:")
-    console.log("Enter Your E-MAIL:")
-    console.log("Enter Your AGE:")
-    console.log("Enter Your HIEGHT:")
-    console.log("Enter Your WEIGHT:")
-    //console.log("Choose your goal:")
-    if (!name || !email) {
-    throw new Error(
-      chalk.red('ERROR: Must provide name and e-mail')
-    );
-  }
 
-  
-}
-// its just an try or example.
-export async function login(){
-  // name
-  console.log("Enter Your Name:")
-  //const name= input();
-  // email
-  // const email = input();
-  console.log("Enter Your e-mail:")
-  if (!name || !email) {
-    throw new Error(
-      chalk.red('ERROR: Must provide name and e-mail')
-    );
-  }
-  // Now we need to go the meals-command
-  console.log("What would you like to do");
-  console.log("ADD MEALS");
-  console.log("DELETE MEALS");
-  console.log("LIST of Meals");
-}
+import { createProfile, login } from '../services/user-service.js';
+import chalk from 'chalk';
+import promptSync from 'prompt-sync';
 
+const prompt = promptSync();
+
+/**
+ * Handles the Authentication phase.
+ * Returns the user object once logged in so the main loop can start.
+ */
+export async function userCommands() {
+  while (true) {
+    try {
+      console.log(chalk.blue('\n=============================='));
+      console.log(chalk.blue('    Welcome to FoodTracker'));
+      console.log(chalk.blue('=============================='));
+      console.log('1. Create Profile');
+      console.log('2. Login');
+      console.log('3. Exit');
+
+      const userInput = prompt(chalk.yellow('Select an option: '));
+
+      if (userInput === '3') {
+        console.log(chalk.magenta('Goodbye! Stay healthy.'));
+        process.exit(0); // Closes the app
+      }
+
+      if (userInput === '1') {
+        await createProfile();
+      } 
+      else if (userInput === '2') {
+        const user = await login(); 
+        
+        if (user) {
+          console.log(chalk.green(`\nSuccess! Welcome back, ${user.name || 'User'}.`));
+          // We RETURN the user object. This breaks the while loop 
+          // and sends control back to index.js
+          return user; 
+        } else {
+          console.log(chalk.red('Login failed. Please try again.'));
+        }
+      } 
+      else {
+        console.log(chalk.red('Invalid choice. Please enter 1, 2, or 3.'));
+      }
+    } catch (error) {
+      console.log(chalk.red(`User Error: ${error.message}`));
+    }
+  }
+}
