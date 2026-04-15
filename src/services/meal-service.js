@@ -1,6 +1,7 @@
 import promptSync from 'prompt-sync';
 import chalk from 'chalk';
 const prompt = promptSync();
+import { getFirstFdcId, getNutrition } from '../intergrations/external-api.js';
 
 // add delete list
 // meal service
@@ -37,18 +38,39 @@ export async function addMeal() {
     return;
   }
   const amountWithUnit = `${foodAmount} ${unit}`;
-  console.log(chalk.green(`ADDED: ${foodName} ${amountWithUnit}`));
-
+  
   const meal = {
     name: foodName,
     amount: foodAmount,
     unit,
     display: amountWithUnit,
+    nutrition: await calculateNutrition(foodName, foodAmount),
     createdAt: new Date().toISOString(),
   };
+  console.log(chalk.green(`ADDED: ${foodName} ${amountWithUnit} `));
+
   return meal;
 }
-
+async function calculateNutrition(foodName, foodAmount) {
+  const nutrition = await getNutrition(await getFirstFdcId(foodName));
+  const multiplier = foodAmount / 100;
+  const kcal = nutrition.kcal * multiplier;
+  const protein = nutrition.protein * multiplier;
+  const fat = nutrition.fat * multiplier;
+  const carbs = nutrition.carbs * multiplier;
+  const water = nutrition.water * multiplier;
+  const caffeine = nutrition.caffeine * multiplier;
+  const alcohol = nutrition.alcohol * multiplier;
+  return {
+    "kcal": kcal,
+    "protein": protein,
+    "fat": fat,
+    "carbs": carbs,
+    "water": water,
+    "caffeine": caffeine,
+    "alcohol": alcohol,
+  };
+}
 export async function deleteMeal() {
 
 }
