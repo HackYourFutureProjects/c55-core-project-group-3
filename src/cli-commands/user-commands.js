@@ -55,11 +55,10 @@ export async function userCommands() {
 
       if (userInput === '3') {
         console.log(chalk.magenta('Goodbye! Stay healthy.'));
-        process.exit(0); // Closes the entire terminal application
+        process.exit(0); // Closes the app
       }
 
       if (userInput === '1') {
-        // After creating a profile, the loop continues to let them login
         await createProfile();
       } 
       else if (userInput === '2') {

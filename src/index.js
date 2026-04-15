@@ -7,15 +7,12 @@ import { reportCli } from './cli-commands/reports-command.js';
 const prompt = promptSync();
 
 export function parseCommand(userInput) {
-  if (!userInput) return { command: '', subcommand: '', args: [] };
-  
-  const cleanedInput = userInput.trim().replace(/\s+/g, ' ');
-  const [command, subcommand, ...args] = cleanedInput.split(' ');
-  
+  const cleaned = String(userInput || '').trim().replace(/\s+/g, ' ');
+  const [command = '', subcommand = '', ...args] = cleaned.split(' ');
   return {
-    command: command ? command.toUpperCase() : '',
-    subcommand: subcommand ? subcommand.toUpperCase() : '',
-    args: args
+    command: command.toUpperCase(),
+    subcommand: subcommand.toUpperCase(),
+    args,
   };
 }
 
@@ -23,18 +20,19 @@ async function startApp() {
   try {
     const currentUser = await userCommands();
 
-    console.log(chalk.green.bold(`\nWelcome to your dashboard, ${currentUser.name}!`));
-    console.log(`- ${chalk.yellow('3')} to Logout/Exit\n`);
+    console.log(chalk.yellow.bold(`\nWhat do you want to do today, ${currentUser.name}?`));
+    
 
     while (true) {
-      const userInput = prompt(chalk.cyan(`${currentUser.name}@foodtracker> `));
+      console.log(chalk.blue('\n=============================='));
+      const userInput = prompt(chalk.cyan(`${currentUser.name}  @foodtracker> `));
 
       if (userInput === '3' || (userInput && userInput.toUpperCase() === 'EXIT')) {
         console.log(chalk.magenta('Logging out... Goodbye!'));
         break;
       }
 
-      if (!userInput) continue;
+      if (!userInput) continue; // there is no action when user press Enter.
 
       const { command, subcommand, args } = parseCommand(userInput);
 
@@ -49,8 +47,9 @@ async function startApp() {
       }
     }
   } catch (error) {
-    console.log(chalk.red(`Critical Application Error: ${error.message}`));
+    console.log(chalk.red(`Application Error: ${error.message}`));
   }
 }
 
 startApp();
+
