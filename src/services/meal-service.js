@@ -17,10 +17,10 @@ export async function addMeal() {
   const foodName = prompt('Enter food name: ');
   let foodAmount;
   while (true) {
-  const amount = prompt('Enter food amount: ').trim();
-  foodAmount = parseFloat(amount);
-  if (Number.isFinite(foodAmount)) break;
-  console.log(chalk.red('Invalid amount please enter a number.'));
+    const amount = prompt('Enter food amount: ').trim();
+    foodAmount = parseFloat(amount);
+    if (Number.isFinite(foodAmount)) break;
+    console.log(chalk.red('Invalid amount please enter a number.'));
   }
   console.log('Choose unit:');
   console.log('1. g');
@@ -38,7 +38,7 @@ export async function addMeal() {
     return;
   }
   const amountWithUnit = `${foodAmount} ${unit}`;
-  
+
   const meal = {
     name: foodName,
     amount: foodAmount,
@@ -51,7 +51,7 @@ export async function addMeal() {
 
   return meal;
 }
-async function calculateNutrition(foodName, foodAmount) {
+export async function calculateNutrition(foodName, foodAmount) {
   const nutrition = await getNutrition(await getFirstFdcId(foodName));
   const multiplier = foodAmount / 100;
   const kcal = nutrition.kcal * multiplier;
@@ -62,17 +62,15 @@ async function calculateNutrition(foodName, foodAmount) {
   const caffeine = nutrition.caffeine * multiplier;
   const alcohol = nutrition.alcohol * multiplier;
   return {
-    "kcal": kcal,
-    "protein": protein,
-    "fat": fat,
-    "carbs": carbs,
-    "water": water,
-    "caffeine": caffeine,
-    "alcohol": alcohol,
+    kcal: kcal,
+    protein: protein,
+    fat: fat,
+    carbs: carbs,
+    water: water,
+    caffeine: caffeine,
+    alcohol: alcohol,
   };
 }
-export async function deleteMeal() {
-
-}
+export async function deleteMeal() {}
 
 export async function listofMeal() {}
