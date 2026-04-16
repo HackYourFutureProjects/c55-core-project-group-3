@@ -7,7 +7,9 @@ import { reportCli } from './cli-commands/reports-command.js';
 const prompt = promptSync();
 
 export function parseCommand(userInput) {
-  const cleaned = String(userInput || '').trim().replace(/\s+/g, ' ');
+  const cleaned = String(userInput || '')
+    .trim()
+    .replace(/\s+/g, ' ');
   const [command = '', subcommand = '', ...args] = cleaned.split(' ');
   return {
     command: command.toUpperCase(),
@@ -20,30 +22,36 @@ async function startApp() {
   try {
     const currentUser = await userCommands();
 
-    console.log(chalk.yellow.bold(`\nWhat do you want to do today, ${currentUser.name}?`));
-    
+    console.log(
+      chalk.yellow.bold(`\nWhat do you want to do today, ${currentUser.name}?`)
+    );
 
     while (true) {
       console.log(chalk.blue('\n=============================='));
-      const userInput = prompt(chalk.cyan(`${currentUser.name}  @foodtracker> `));
+      const userInput = prompt(
+        chalk.cyan(`${currentUser.name}  @foodtracker> `)
+      );
 
-      if (userInput === '3' || (userInput && userInput.toUpperCase() === 'EXIT')) {
+      if (
+        userInput === '3' ||
+        (userInput && userInput.toUpperCase() === 'EXIT')
+      ) {
         console.log(chalk.magenta('Logging out... Goodbye!'));
         break;
       }
 
-      if (!userInput) continue; // there is no action when user press Enter.
+      if (!userInput) continue;
 
       const { command, subcommand, args } = parseCommand(userInput);
 
       if (command === 'MEAL') {
-        await mealsCli(subcommand, args);
-      } 
-      else if (command === 'REPORT') {
-        await reportCli(subcommand, args);
-      } 
-      else {
-        console.log(chalk.red('Unknown command. Please use MEAL, REPORT, or 3 to exit.'));
+        await mealsCli(subcommand, args, currentUser);
+      } else if (command === 'REPORT') {
+        await reportCli(subcommand, args, currentUser);
+      } else {
+        console.log(
+          chalk.red('Unknown command. Please use MEAL, REPORT, or 3 to exit.')
+        );
       }
     }
   } catch (error) {
@@ -52,4 +60,3 @@ async function startApp() {
 }
 
 startApp();
-
