@@ -51,7 +51,8 @@ export async function addMeal() {
   console.log(
     chalk.green(`ADDED: ${foodName} ${amountWithUnit} ${JSON.stringify(meal.nutrition)}`)
   );
-  const goals = {
+  // hard code the goals just for testing.Temporary 
+   const goals = {
     kcal: 2000,
     protein: 2000,
     fat: 2000,
