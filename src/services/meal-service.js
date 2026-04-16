@@ -2,6 +2,7 @@ import promptSync from 'prompt-sync';
 import chalk from 'chalk';
 const prompt = promptSync();
 import { getFirstFdcId, getNutrition } from '../intergrations/external-api.js';
+import { generateReport } from '../intergrations/ai.js';
 
 // add delete list
 // meal service
@@ -17,10 +18,10 @@ export async function addMeal() {
   const foodName = prompt('Enter food name: ');
   let foodAmount;
   while (true) {
-  const amount = prompt('Enter food amount: ').trim();
-  foodAmount = parseFloat(amount);
-  if (Number.isFinite(foodAmount)) break;
-  console.log(chalk.red('Invalid amount please enter a number.'));
+    const amount = prompt('Enter food amount: ').trim();
+    foodAmount = parseFloat(amount);
+    if (Number.isFinite(foodAmount)) break;
+    console.log(chalk.red('Invalid amount please enter a number.'));
   }
   console.log('Choose unit:');
   console.log('1. g');
@@ -38,7 +39,7 @@ export async function addMeal() {
     return;
   }
   const amountWithUnit = `${foodAmount} ${unit}`;
-  
+
   const meal = {
     name: foodName,
     amount: foodAmount,
@@ -47,8 +48,20 @@ export async function addMeal() {
     nutrition: await calculateNutrition(foodName, foodAmount),
     createdAt: new Date().toISOString(),
   };
-  console.log(chalk.green(`ADDED: ${foodName} ${amountWithUnit} `));
-
+  console.log(
+    chalk.green(`ADDED: ${foodName} ${amountWithUnit} ${JSON.stringify(meal.nutrition)}`)
+  );
+  // hard code the goals just for testing.Temporary 
+   const goals = {
+    kcal: 2000,
+    protein: 2000,
+    fat: 2000,
+    carbs: 2000,
+    water: 2000,
+    caffeine: 2000,
+    alcohol: 120,
+  };
+  console.log(await generateReport(goals, [meal]));
   return meal;
 }
 async function calculateNutrition(foodName, foodAmount) {
@@ -62,17 +75,15 @@ async function calculateNutrition(foodName, foodAmount) {
   const caffeine = nutrition.caffeine * multiplier;
   const alcohol = nutrition.alcohol * multiplier;
   return {
-    "kcal": kcal,
-    "protein": protein,
-    "fat": fat,
-    "carbs": carbs,
-    "water": water,
-    "caffeine": caffeine,
-    "alcohol": alcohol,
+    kcal: kcal,
+    protein: protein,
+    fat: fat,
+    carbs: carbs,
+    water: water,
+    caffeine: caffeine,
+    alcohol: alcohol,
   };
 }
-export async function deleteMeal() {
-
-}
+export async function deleteMeal() {}
 
 export async function listofMeal() {}

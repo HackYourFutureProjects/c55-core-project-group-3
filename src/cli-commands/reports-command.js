@@ -25,7 +25,7 @@ Alcohol:   0               ✅ perfect
 1. Reduce cheese portion slightly to lower fat
 2. Drink 2 more glasses of water tomorrow
 3. Great job on protein — keep it 
-*/
+*/ 
 import chalk from 'chalk';
 
 
@@ -46,6 +46,7 @@ const month = date.toLocaleDateString('en-GB', { month: 'long' });
 const year = date.getFullYear();
 
 const formatted = `${weekday} ${day} ${month} ${year}`; // "Friday 11 April 2026"
+
 console.log('Date:', formatted);
 }
 
