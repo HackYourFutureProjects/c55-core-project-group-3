@@ -30,6 +30,7 @@
   "dependencies": {
     "chalk": "^5.6.2",
     "dotenv": "^17.4.2",
+    "openai": "^6.34.0",
     "prompt-sync": "^4.2.0",
     "sql": "^0.78.0"
   }
