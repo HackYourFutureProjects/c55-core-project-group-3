@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from 'vitest';
+import {  expect, test, vi } from 'vitest';
 import { mealsCli } from '../src/cli-commands/meals-command.js';
 import * as mealService from '../src/services/meal-service.js';
 
