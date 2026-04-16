@@ -1,3 +1,4 @@
+/*eslint-env node*/
 import 'dotenv/config';
 
 const API_BASE_URL = 'https://api.nal.usda.gov/fdc/v1';
