@@ -1,6 +1,6 @@
 -- USERS
 
--- name: createUser
+-- name: createUser(saveUser)
 INSERT INTO users (email, name, age, weight, height)
 VALUES (?, ?, ?, ?, ?);
 
@@ -8,10 +8,19 @@ VALUES (?, ?, ?, ?, ?);
 SELECT * FROM users
 WHERE id = ?;
 
+-- name: updateUser
+UPDATE users
+SET
+    email = ?,
+    name = ?,
+    age = ?,
+    weight = ?,
+    height = ?
+WHERE id = ?;
 
 -- GOALS
 
--- name: createGoal
+-- name: createGoal(saveGoal)
 INSERT INTO goals (user_id, kcal, protein, fat, carbs, water, caffeine, alcohol)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?);
 
@@ -19,7 +28,19 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?);
 SELECT * FROM goals
 WHERE user_id = ?;
 
--- MEALS (WRITE)
+-- name: updateGoal
+UPDATE goals
+SET
+    kcal = ?,
+    protein = ?,
+    fat = ?,
+    carbs = ?,
+    water = ?,
+    caffeine = ?,
+    alcohol = ?
+WHERE user_id = ?;
+
+-- MEALS
 
 -- name: createMeal
 INSERT INTO meals (
@@ -37,7 +58,34 @@ INSERT INTO meals (
 )
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
--- MEALS (READ)
+-- name: getMealById
+SELECT *
+FROM meals
+WHERE id = ?;
+
+-- name: updateMeal
+UPDATE meals
+SET
+    name = ?,
+    quantity = ?,
+    calories = ?,
+    protein = ?,
+    fat = ?,
+    carbs = ?,
+    water = ?,
+    caffeine = ?,
+    alcohol = ?
+WHERE id = ?;
+
+-- name: deleteMeal
+DELETE FROM meals
+WHERE id = ?;
+
+-- name: getAllMeals
+SELECT *
+FROM meals
+WHERE user_id = ?
+ORDER BY created_at DESC;
 
 -- name: getMealsByDate
 SELECT *
