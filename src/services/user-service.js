@@ -25,7 +25,6 @@ export async function setGoals(userId) {
     alcohol,
     water,
     caffeine,
-    alcohol,
   };
   addGoal(userId, calories, protein, fat, carbs, water, caffeine, alcohol);
   return goals;
