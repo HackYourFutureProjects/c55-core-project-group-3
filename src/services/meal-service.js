@@ -2,19 +2,9 @@ import promptSync from 'prompt-sync';
 import chalk from 'chalk';
 const prompt = promptSync();
 import { getFirstFdcId, getNutrition } from '../intergrations/external-api.js';
-import { generateReport } from '../intergrations/ai.js';
+import { addMeal as addMealRepository } from '../repositories/meal-repository.js';
 
-// add delete list
-// meal service
-// DB
-/*export async function getMeals(){
-
-}*/
-
-/*export async function saveMeals(){
-    
-}*/
-export async function addMeal() {
+export async function addMeal(userId) {
   const foodName = prompt('Enter food name: ');
   let foodAmount;
   while (true) {
@@ -25,7 +15,7 @@ export async function addMeal() {
   }
   console.log('Choose unit:');
   console.log('1. g');
-  console.log('2. ml'); // check the units
+  console.log('2. ml');
   const choose = prompt('> ').trim();
   let unit = 'g';
   if (choose === '1' || choose === 'g') {
@@ -48,20 +38,21 @@ export async function addMeal() {
     nutrition: await calculateNutrition(foodName, foodAmount),
     createdAt: new Date().toISOString(),
   };
-  console.log(
-    chalk.green(`ADDED: ${foodName} ${amountWithUnit} ${JSON.stringify(meal.nutrition)}`)
+  addMealRepository(
+    userId,
+    meal.createdAt,
+    meal.name,
+    meal.amount,
+    meal.nutrition.kcal,
+    meal.nutrition.protein,
+    meal.nutrition.fat,
+    meal.nutrition.carbs,
+    meal.nutrition.water,
+    meal.nutrition.caffeine,
+    meal.nutrition.alcohol
   );
-  // hard code the goals just for testing.Temporary 
-   const goals = {
-    kcal: 2000,
-    protein: 2000,
-    fat: 2000,
-    carbs: 2000,
-    water: 2000,
-    caffeine: 2000,
-    alcohol: 120,
-  };
-  console.log(await generateReport(goals, [meal]));
+  console.log(chalk.green(`ADDED: ${foodName} ${amountWithUnit}`));
+
   return meal;
 }
 async function calculateNutrition(foodName, foodAmount) {

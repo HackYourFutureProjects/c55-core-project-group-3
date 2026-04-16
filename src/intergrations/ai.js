@@ -13,20 +13,7 @@ export async function generateReport(goal, meals) {
         GOALS:
         kcal: ${goal.kcal}, protein: ${goal.protein}g, fat: ${goal.fat}g, carbs: ${goal.carbs}g, water: ${goal.water}ml, caffeine: ${goal.caffeine}mg, alcohol: ${goal.alcohol}ml
         MEALS:
-        ${meals.map((meal) => `- ${meal.name}: ${meal.amount} calorie ${meal.nutrition.kcal}kcal, portein ${meal.nutrition.protein}g, fat ${meal.nutrition.fat}g, carbs ${meal.nutrition.carbs}g, water ${meal.nutrition.water}ml, caffeine ${meal.nutrition.caffeine}ml, alcohol${meal.nutrition.alcohol}ml`).join('\n')}
-        TASK:
-        1. Calculate total intake:
-           - kcal, protein, fat, carbs 
-           - Estimate water, caffeine, alcohol if missing
-        2. Compare totals to goals:
-           - Clearly state if each is: "under", "on target", or "over"
-        3. Write a short summary:
-           - Start with something positive
-           - Then mention the biggest gap
-        4. Give a score from 1 to 10
-        5. Give exactly 3 recommendations:
-           - Practical and specific
-           - Focus on improvement for tomorrow
+        ${meals.map((meal) => `- ${meal.name}: ${meal.quantity}  calorie ${meal.calories}kcal, portein ${meal.protein}g, fat ${meal.fat}g, carbs ${meal.carbs}g, water ${meal.water}ml, caffeine ${meal.caffeine}ml, alcohol ${meal.alcohol}ml`).join('\n')}
         OUTPUT FORMAT (STRICT):
         SUMMARY: (2-3 sentences, friendly, starts positive)
         SCORE: X/10

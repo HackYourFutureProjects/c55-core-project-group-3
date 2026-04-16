@@ -7,7 +7,6 @@ export async function getFirstFdcId(query) {
   if (!API_KEY) {
     throw new Error('Missing FDC_API_KEY in .env file');
   }
-  
 
   const params = new URLSearchParams({
     api_key: API_KEY,
@@ -55,7 +54,15 @@ export async function getNutrition(fdcId) {
     return nutrient?.amount ?? 0;
   }
 
-  return {
+  function normalizeTo100(value, servingSize) {
+    if (!servingSize || servingSize <= 0) {
+      return value;
+    }
+
+    return (value / servingSize) * 100;
+  }
+
+  const rawNutrition = {
     kcal: getNutrientAmount([
       'Energy',
       'Energy (Atwater General Factors)',
@@ -67,5 +74,35 @@ export async function getNutrition(fdcId) {
     water: getNutrientAmount(['Water']),
     caffeine: getNutrientAmount(['Caffeine']),
     alcohol: getNutrientAmount(['Alcohol, ethyl']),
+  };
+
+  const servingSize = Number(data.servingSize);
+  const servingSizeUnit = data.servingSizeUnit?.toLowerCase();
+
+  const canNormalize =
+    data.dataType === 'Branded' &&
+    servingSize > 0 &&
+    (servingSizeUnit === 'g' || servingSizeUnit === 'ml');
+
+  if (canNormalize) {
+    return {
+      kcal: normalizeTo100(rawNutrition.kcal, servingSize),
+      protein: normalizeTo100(rawNutrition.protein, servingSize),
+      fat: normalizeTo100(rawNutrition.fat, servingSize),
+      carbs: normalizeTo100(rawNutrition.carbs, servingSize),
+      water: normalizeTo100(rawNutrition.water, servingSize),
+      caffeine: normalizeTo100(rawNutrition.caffeine, servingSize),
+      alcohol: normalizeTo100(rawNutrition.alcohol, servingSize),
+    };
+  }
+
+  return {
+    kcal: rawNutrition.kcal,
+    protein: rawNutrition.protein,
+    fat: rawNutrition.fat,
+    carbs: rawNutrition.carbs,
+    water: rawNutrition.water,
+    caffeine: rawNutrition.caffeine,
+    alcohol: rawNutrition.alcohol,
   };
 }
