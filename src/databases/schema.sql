@@ -1,5 +1,5 @@
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     email TEXT,
     name TEXT,
     age INT,
@@ -8,7 +8,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE goals (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INT NOT NULL,
     kcal INT,
     protein FLOAT,
@@ -25,7 +25,7 @@ CREATE TABLE goals (
 );
 
 CREATE TABLE meals (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     source TEXT,

@@ -8,6 +8,12 @@ const databaseFile = join(__dirname, '../databases/food_tracker.db');
 
 const db = new Database(databaseFile);
 
+function goalNumber(value) {
+  if (value === null || value === undefined) return 0;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : 0;
+}
+
 export function addGoal(
   userId,
   kCal,
@@ -27,6 +33,27 @@ export function addGoal(
 }
 
 export function getUserGoals(userId) {
-  const goals = db.prepare('SELECT * FROM goals WHERE user_id = ?').get(userId);
-  return goals;
+  const row = db.prepare('SELECT * FROM goals WHERE user_id = ?').get(userId);
+  if (!row) {
+    return {
+      user_id: userId,
+      kcal: 0,
+      protein: 0,
+      fat: 0,
+      carbs: 0,
+      water: 0,
+      caffeine: 0,
+      alcohol: 0,
+    };
+  }
+  return {
+    ...row,
+    kcal: goalNumber(row.kcal),
+    protein: goalNumber(row.protein),
+    fat: goalNumber(row.fat),
+    carbs: goalNumber(row.carbs),
+    water: goalNumber(row.water),
+    caffeine: goalNumber(row.caffeine),
+    alcohol: goalNumber(row.alcohol),
+  };
 }
