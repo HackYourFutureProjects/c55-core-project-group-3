@@ -56,7 +56,16 @@ INSERT INTO meals (
     caffeine,
     alcohol
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+VALUES( 
+    ?, ?, ?, ?,
+    ROUND(?, 1),
+    ROUND(?, 1),
+    ROUND(?, 1),
+    ROUND(?, 1),
+    ROUND(?, 1),
+    ROUND(?, 1),
+    ROUND(?, 1)
+);
 
 -- name: getMealById
 SELECT *
