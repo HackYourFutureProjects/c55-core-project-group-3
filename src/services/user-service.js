@@ -6,13 +6,17 @@ import {
 } from '../repositories/user-repository.js';
 import { addGoal } from '../repositories/goal-repository.js';
 
+const PFC_CALORIES = { protein: 4, carbs: 4, fat: 9 };
+
 const prompt = promptSync();
 
 export async function setGoals(userId) {
-  const calories = parseFloat(prompt('Enter desired Calories: '));
+  // const calories = parseFloat(prompt('Enter desired Calories: '));
   const protein = parseFloat(prompt('Enter desired Protein: '));
   const carbs = parseFloat(prompt('Enter desired Carbs: '));
   const fat = parseFloat(prompt('Enter desired Fat: '));
+  const calories = protein * PFC_CALORIES.protein + carbs * PFC_CALORIES.carbs + fat * PFC_CALORIES.fat;
+  console.log(`Desired calories: ${chalk.green(calories)}`)
   const alcohol = parseFloat(prompt('Enter desired Alcohol: '));
   const caffeine = parseFloat(prompt('Enter desired Caffeine: '));
   const water = parseFloat(prompt('Enter desired Water: '));
