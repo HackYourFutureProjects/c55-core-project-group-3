@@ -15,7 +15,7 @@ export async function mealsCli(subcommand, args, currentUser) {
       await listofMeal(currentUser.id);
       break;
     case 'DELETE':
-      await deleteMeal(...args);
+      await deleteMeal(currentUser.id);
       break;
     default:
       console.log(chalk.red('Invalid Meal action. Try ADD, LIST, or DELETE.'));

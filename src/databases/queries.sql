@@ -106,7 +106,6 @@ AND DATE(created_at) = ?;
 
 -- name: getDailyTotals
 SELECT
-SELECT
     COALESCE(SUM(calories), 0) AS total_kcal,
     COALESCE(SUM(protein), 0) AS total_protein,
     COALESCE(SUM(fat), 0) AS total_fat,

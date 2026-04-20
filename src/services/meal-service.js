@@ -2,7 +2,7 @@ import promptSync from 'prompt-sync';
 import chalk from 'chalk';
 const prompt = promptSync();
 import { getFirstFdcId, getNutrition } from '../intergrations/external-api.js';
-import { addMeal as addMealRepository } from '../repositories/meal-repository.js';
+import { addMeal as addMealRepository, getTodaysMealsByUserId, deleteMealByMealId } from '../repositories/meal-repository.js';
 
 export async function addMeal(userId) {
   const foodName = prompt('Enter food name: ');
@@ -75,6 +75,67 @@ async function calculateNutrition(foodName, foodAmount) {
     alcohol: alcohol,
   };
 }
-export async function deleteMeal() {}
 
-export async function listofMeal() {}
+export async function deleteMeal(userId) {
+  await listofMeal(userId);
+
+  console.log();
+
+  const idInput = prompt('Choose Meal ID to delete: ').trim();
+  const mealId = Number(idInput);
+
+  if (!Number.isInteger(mealId)) {
+    console.log(chalk.red('Invalid Meal ID'));
+    return;
+  }
+
+  const confirm = prompt('Are you sure? (y/n): ').toLowerCase();
+  if (confirm !== 'y') {
+    console.log(chalk.yellow('Deletion cancelled'));
+    return;
+  }
+
+  const result = deleteMealByMealId(mealId);
+
+  if (result.changes === 0) {
+    console.log(chalk.yellow(`Meal with ID ${mealId} not found`));
+  } else {
+    console.log(chalk.green(`Meal ${mealId} deleted`));
+  }
+}
+
+export async function listofMeal(userId) {
+  
+  const daylyListOfMeal = getTodaysMealsByUserId(userId)
+    console.log(
+    'Meal ID'.padEnd(10) + ' | ' +
+    'Product'.padEnd(18) + ' | ' +
+    'Kcal'.padEnd(5) + ' | ' +
+    'Prot'.padEnd(5) + ' | ' +
+    'Fat'.padEnd(5) + ' | ' +
+    'Carbs'.padEnd(8) + ' | ' +
+    'Water'.padEnd(5) + ' | ' +
+    'Caffeine'.padEnd(8) + ' | ' +
+    'Alcohol'
+  );
+
+  console.log('-'.repeat(95));
+
+  daylyListOfMeal.forEach(meal => {
+    console.log(
+      String(meal.id).padEnd(10) + ' | ' +
+      `${meal.name} ${meal.quantity}g`.padEnd(18) + ' | ' +
+      Math.round(meal.calories).toString().padEnd(5) + ' | ' +
+      `${meal.protein}g`.padEnd(5) + ' | ' +
+      `${meal.fat}g`.padEnd(5) + ' | ' +
+      `${meal.carbs}g`.padEnd(8) + ' | ' +
+      `${meal.water}ml`.padEnd(5) + ' | ' +
+      `${meal.caffeine}mg`.padEnd(8) + ' | ' +
+      `${meal.alcohol}g`
+    );
+  });
+
+return daylyListOfMeal
+}
+
+// export async function listofTotals() {}
