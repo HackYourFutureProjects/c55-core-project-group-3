@@ -1,4 +1,8 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect, vi } from 'vitest';
+
+// set fake API key BEFORE the module loads
+vi.stubEnv('FDC_API_KEY', 'test-api-key');
+
 import { getFirstFdcId } from '../src/intergrations/external-api.js';
 
 describe('getFirstFdcId', () => {
@@ -30,7 +34,7 @@ describe('getFirstFdcId', () => {
 
     try {
       await getFirstFdcId('apple');
-      expect(true).toBe(false); 
+      expect(true).toBe(false);
     } catch (error) {
       expect(error.message).toBe('FDC API error: 401');
     }
