@@ -23,7 +23,7 @@ export function addMeal(
 ) {
   const meal = db
     .prepare(
-      'INSERT INTO meals (user_id, created_at, name, quantity, calories, protein, fat, carbs, water, caffeine, alcohol) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+      'INSERT INTO meals (user_id, created_at, name, quantity, calories, protein, fat, carbs, water, caffeine, alcohol) VALUES ( ?, ?, ?, ?, ROUND(?, 1), ROUND(?, 1), ROUND(?, 1), ROUND(?, 1), ROUND(?, 1), ROUND(?, 1), ROUND(?, 1));'
     )
     .run(
       userId,
