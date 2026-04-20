@@ -2,7 +2,7 @@ import promptSync from 'prompt-sync';
 import chalk from 'chalk';
 const prompt = promptSync();
 import { getFirstFdcId, getNutrition } from '../intergrations/external-api.js';
-import { addMeal as addMealRepository } from '../repositories/meal-repository.js';
+import { addMeal as addMealRepository, getTodaysMealsByUserId } from '../repositories/meal-repository.js';
 
 export async function addMeal(userId) {
   const foodName = prompt('Enter food name: ');
@@ -38,6 +38,9 @@ export async function addMeal(userId) {
     nutrition: await calculateNutrition(foodName, foodAmount),
     createdAt: new Date().toISOString(),
   };
+
+  
+
   addMealRepository(
     userId,
     meal.createdAt,
@@ -55,7 +58,7 @@ export async function addMeal(userId) {
 
   return meal;
 }
-async function calculateNutrition(foodName, foodAmount) {
+ export async function calculateNutrition(foodName, foodAmount) {
   const nutrition = await getNutrition(await getFirstFdcId(foodName));
   const multiplier = foodAmount / 100;
   const kcal = nutrition.kcal * multiplier;
@@ -77,4 +80,20 @@ async function calculateNutrition(foodName, foodAmount) {
 }
 export async function deleteMeal() {}
 
-export async function listofMeal() {}
+export async function listofMeal(userId) {
+  const meals = getTodaysMealsByUserId(userId);
+
+  if (!meals || meals.length === 0) {
+    console.log(chalk.yellow('No meals found for today.'));
+    return [];
+  }
+
+  console.log(chalk.green("Today's meals:"));
+  meals.forEach((meal, index) => {
+    console.log(
+      `${index + 1}. ${meal.name} — ${meal.quantity} ${meal.quantity === 1 ? '' : ''} | kcal: ${meal.calories} | protein: ${meal.protein} | fat: ${meal.fat} | carbs: ${meal.carbs}`
+    );
+  });
+
+  return meals;
+}

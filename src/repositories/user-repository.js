@@ -22,3 +22,10 @@ export function getUserByNameAndEmail(name, email) {
     .get(name, email);
   return user;
 }
+
+export function getUserByEmail(email) {
+  const user = db
+    .prepare('SELECT * FROM users WHERE email = ?')
+    .get(email);
+  return user;
+}
