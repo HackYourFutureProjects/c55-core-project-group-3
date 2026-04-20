@@ -2,7 +2,7 @@ import promptSync from 'prompt-sync';
 import chalk from 'chalk';
 const prompt = promptSync();
 import { getFirstFdcId, getNutrition } from '../intergrations/external-api.js';
-import { addMeal as addMealRepository, getTodaysMealsByUserId } from '../repositories/meal-repository.js';
+import { addMeal as addMealRepository, getTodaysMealsByUserId, deleteMealByMealId } from '../repositories/meal-repository.js';
 
 export async function addMeal(userId) {
   const foodName = prompt('Enter food name: ');
@@ -78,22 +78,67 @@ export async function addMeal(userId) {
     alcohol: alcohol,
   };
 }
-export async function deleteMeal() {}
 
-export async function listofMeal(userId) {
-  const meals = getTodaysMealsByUserId(userId);
+export async function deleteMeal(userId) {
+  await listofMeal(userId);
 
-  if (!meals || meals.length === 0) {
-    console.log(chalk.yellow('No meals found for today.'));
-    return [];
+  console.log();
+
+  const idInput = prompt('Choose Meal ID to delete: ').trim();
+  const mealId = Number(idInput);
+
+  if (!Number.isInteger(mealId)) {
+    console.log(chalk.red('Invalid Meal ID'));
+    return;
   }
 
-  console.log(chalk.green("Today's meals:"));
-  meals.forEach((meal, index) => {
+  const confirm = prompt('Are you sure? (y/n): ').toLowerCase();
+  if (confirm !== 'y') {
+    console.log(chalk.yellow('Deletion cancelled'));
+    return;
+  }
+
+  const result = deleteMealByMealId(mealId);
+
+  if (result.changes === 0) {
+    console.log(chalk.yellow(`Meal with ID ${mealId} not found`));
+  } else {
+    console.log(chalk.green(`Meal ${mealId} deleted`));
+  }
+}
+
+export async function listofMeal(userId) {
+  
+  const daylyListOfMeal = getTodaysMealsByUserId(userId)
     console.log(
-      `${index + 1}. ${meal.name} — ${meal.quantity} ${meal.quantity === 1 ? '' : ''} | kcal: ${meal.calories} | protein: ${meal.protein} | fat: ${meal.fat} | carbs: ${meal.carbs}`
+    'Meal ID'.padEnd(10) + ' | ' +
+    'Product'.padEnd(18) + ' | ' +
+    'Kcal'.padEnd(5) + ' | ' +
+    'Prot'.padEnd(5) + ' | ' +
+    'Fat'.padEnd(5) + ' | ' +
+    'Carbs'.padEnd(8) + ' | ' +
+    'Water'.padEnd(5) + ' | ' +
+    'Caffeine'.padEnd(8) + ' | ' +
+    'Alcohol'
+  );
+
+  console.log('-'.repeat(95));
+
+  daylyListOfMeal.forEach(meal => {
+    console.log(
+      String(meal.id).padEnd(10) + ' | ' +
+      `${meal.name} ${meal.quantity}g`.padEnd(18) + ' | ' +
+      Math.round(meal.calories).toString().padEnd(5) + ' | ' +
+      `${meal.protein}g`.padEnd(5) + ' | ' +
+      `${meal.fat}g`.padEnd(5) + ' | ' +
+      `${meal.carbs}g`.padEnd(8) + ' | ' +
+      `${meal.water}ml`.padEnd(5) + ' | ' +
+      `${meal.caffeine}mg`.padEnd(8) + ' | ' +
+      `${meal.alcohol}g`
     );
   });
 
-  return meals;
+return daylyListOfMeal
 }
+
+// export async function listofTotals() {}
