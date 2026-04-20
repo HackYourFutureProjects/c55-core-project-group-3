@@ -1,6 +1,6 @@
 import { addMeal, deleteMeal, listofMeal } from '../services/meal-service.js';
 import { getGoals } from '../services/user-service.js';
-import { getUserGoals } from '../repositories/goal-repository.js';
+
 import chalk from 'chalk';
 
 export async function mealsCli(subcommand, args, currentUser) {
