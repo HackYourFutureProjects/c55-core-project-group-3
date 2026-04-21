@@ -24,7 +24,7 @@ export async function userCommands() {
       if (userInput === '1') {
         await createProfile();
       } else if (userInput === '2') {
-        const user = await login();
+        const user = login();
 
         if (user) {
           console.log(

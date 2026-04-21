@@ -38,6 +38,9 @@ export async function addMeal(userId) {
     nutrition: await calculateNutrition(foodName, foodAmount),
     createdAt: new Date().toISOString(),
   };
+
+  
+
   addMealRepository(
     userId,
     meal.createdAt,
@@ -55,7 +58,7 @@ export async function addMeal(userId) {
 
   return meal;
 }
-async function calculateNutrition(foodName, foodAmount) {
+ export async function calculateNutrition(foodName, foodAmount) {
   const nutrition = await getNutrition(await getFirstFdcId(foodName));
   const multiplier = foodAmount / 100;
   const kcal = nutrition.kcal * multiplier;

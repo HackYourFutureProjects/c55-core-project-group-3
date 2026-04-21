@@ -1,9 +1,9 @@
 import 'dotenv/config';
 
 const API_BASE_URL = 'https://api.nal.usda.gov/fdc/v1';
-const API_KEY = process.env.FDC_API_KEY;
 
 export async function getFirstFdcId(query) {
+  const API_KEY = process.env.FDC_API_KEY;
   if (!API_KEY) {
     throw new Error('Missing FDC_API_KEY in .env file');
   }
@@ -30,6 +30,7 @@ export async function getFirstFdcId(query) {
 }
 
 export async function getNutrition(fdcId) {
+  const API_KEY = process.env.FDC_API_KEY;
   if (!API_KEY) {
     throw new Error('Missing FDC_API_KEY in .env file');
   }
