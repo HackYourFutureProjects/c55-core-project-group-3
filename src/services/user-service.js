@@ -84,7 +84,7 @@ export async function getGoals(userId) {
 
   console.log(`\n${chalk.blue('--- Your Current Goals ---')}`);
 
-  const calories = goals.calories || 0;
+  const calories = goals.kcal || 0;
   console.log(`Calories: ${chalk.green(calories.toFixed(2))}`);
 
   console.log(`Protein: ${chalk.green(goals.protein ?? 'Not set')}`);
