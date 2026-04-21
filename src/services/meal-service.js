@@ -13,20 +13,22 @@ export async function addMeal(userId) {
     if (Number.isFinite(foodAmount)) break;
     console.log(chalk.red('Invalid amount please enter a number.'));
   }
-  console.log('Choose unit:');
-  console.log('1. g');
-  console.log('2. ml');
-  const choose = prompt('> ').trim();
-  let unit = 'g';
-  if (choose === '1' || choose === 'g') {
-    unit = 'g';
-  }
-  if (choose === '2' || choose === 'ml') {
-    unit = 'ml';
-  }
-  if (Number.isNaN(foodAmount)) {
-    console.log(chalk.red('Invalid amount'));
-    return;
+ let unit;
+  while (true) {
+    console.log('Choose unit:');
+    console.log('1. g');
+    console.log('2. ml');
+    const choose = prompt('> ').trim();
+
+    if (choose === '1' || choose === 'g') {
+      unit = 'g';
+      break; 
+    } else if (choose === '2' || choose === 'ml') {
+      unit = 'ml';
+      break;
+    } else {
+      console.log(chalk.red('Invalid selection. Please choose 1 for grams or 2 for milliliters.'));
+    }
   }
   const amountWithUnit = `${foodAmount} ${unit}`;
 
